@@ -5,6 +5,8 @@ const WebSocket = require('ws');
 const redis = require('redis');
 const dotenv = require('dotenv');
 const path = require('path'); // path 모듈 추가
+const cors = require('cors'); // <-- 이 줄을 추가합니다.
+
 
 // .env 파일에서 환경 변수 로드
 dotenv.config();
@@ -23,6 +25,14 @@ if (!REDIS_HOST || !REDIS_PASSWORD) {
   console.error("REDIS_HOST 또는 REDIS_PASSWORD 환경 변수가 설정되지 않았습니다.");
   process.exit(1); // 환경 변수가 없으면 애플리케이션 종료
 }
+// CORS 설정 추가 (로컬 개발 환경에서 필요할 수 있음)
+// 운영 환경에서는 Vue.js 프론트엔드의 실제 도메인으로 origin을 제한해야 합니다.
+app.use(cors({
+  origin: '*', // 모든 오리진 허용 (개발용)
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 
 // Redis 클라이언트 생성 (Publisher 및 Subscriber)
 const redisOptions = {
