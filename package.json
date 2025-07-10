@@ -1,22 +1,55 @@
 {
-  "name": "robot-monitoring-app",
+  "name": "fullstack-robot-app",
   "version": "1.0.0",
-  "description": "Integrated Node.js backend and Vue.js frontend for robot monitoring.",
-  "main": "server.js",
+  "description": "Integrated Node.js backend and Vue.js frontend for real-time robot updates",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "npm install --prefix client && npm run build --prefix client",
-    "dev": "node server.js",
-    "build-client": "npm run build --prefix client"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "build-client": "vue-cli-service build",
+    "lint": "eslint --ext .js,.vue src"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2",
-    "socket.io": "^4.7.5",
-    "ioredis": "^5.4.1",
+    "express": "^4.18.2",
+    "ws": "^8.16.0",
+    "redis": "^4.6.13",
     "dotenv": "^16.4.5",
-    "cors": "^2.8.5"
-  }
+    "cors": "^2.8.5",
+    "core-js": "^3.8.3",
+    "vue": "^3.2.13",
+    "tailwindcss": "^3.4.3",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "vue-cli-plugin-tailwind": "~3.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
 }

@@ -1,22 +1,18 @@
-# fe-web06-redis
-redis cache test
-
-## simple front end project 
-root/
-├── server.js               # Node.js 서버 (정적 파일 제공, API, WebSocket)
-├── package.json            # 최상위 프로젝트의 Node.js 의존성 및 스크립트
-├── .env                    # 환경 변수 (Redis 연결 정보)
-├── client/                 # Vue.js 프런트엔드 프로젝트 폴더
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── router/
-│   │   │   └── index.js
-│   │   └── views/
-│   │       ├── HomePage.vue
-│   │       └── RobotMonitoringPage.vue
-│   ├── vue.config.js       # Vue.js 빌드 설정
-│   ├── package.json        # Vue.js 프로젝트의 의존성
-│   └── ... (기타 Vue.js 파일)
-└── dist/                   # Vue.js 빌드 결과물 (Node.js 서버가 제공)
+my-robot-app/
+├── .github/
+│   └── workflows/
+│       └── azure-web-app-deploy.yml  <-- GitHub Actions 워크플로우 파일
+├── node_modules/                     <-- Node.js 종속성
+├── dist/                             <-- Vue.js 빌드 결과물이 배포 시 여기에 복사됩니다.
+├── public/                           <-- Vue.js의 정적 자산 (index.html, favicon.ico 등)
+├── src/                              <-- Vue.js 소스 코드
+│   ├── assets/
+│   ├── components/
+│   │   └── RobotCard.vue
+│   └── App.vue
+│   └── main.js
+├── app.js                            <-- Node.js 서버 코드
+├── package.json                      <-- 통합된 Node.js 및 Vue.js 종속성 및 스크립트
+├── .env                              <-- 로컬 개발용 환경 변수 (Git에 커밋하지 마세요!)
+├── vue.config.js                     <-- Vue.js 설정
+└── README.md
