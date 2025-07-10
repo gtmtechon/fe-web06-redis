@@ -4,9 +4,8 @@ const http = require('http');
 const WebSocket = require('ws');
 const redis = require('redis');
 const dotenv = require('dotenv');
-const path = require('path'); // path 모듈 추가
-const cors = require('cors'); // <-- 이 줄을 추가합니다.
-
+const path = require('path');
+const cors = require('cors'); // CORS 미들웨어 추가 (로컬 개발 시 필요)
 
 // .env 파일에서 환경 변수 로드
 dotenv.config();
@@ -14,6 +13,14 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+
+// CORS 설정 추가 (로컬 개발 환경에서 필요할 수 있음)
+// 운영 환경에서는 Vue.js 프론트엔드의 실제 도메인으로 origin을 제한해야 합니다.
+app.use(cors({
+  origin: '*', // 모든 오리진 허용 (개발용)
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Redis 클라이언트 설정
 const REDIS_HOST = process.env.REDIS_HOST;
@@ -25,14 +32,6 @@ if (!REDIS_HOST || !REDIS_PASSWORD) {
   console.error("REDIS_HOST 또는 REDIS_PASSWORD 환경 변수가 설정되지 않았습니다.");
   process.exit(1); // 환경 변수가 없으면 애플리케이션 종료
 }
-// CORS 설정 추가 (로컬 개발 환경에서 필요할 수 있음)
-// 운영 환경에서는 Vue.js 프론트엔드의 실제 도메인으로 origin을 제한해야 합니다.
-app.use(cors({
-  origin: '*', // 모든 오리진 허용 (개발용)
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
 
 // Redis 클라이언트 생성 (Publisher 및 Subscriber)
 const redisOptions = {
@@ -90,6 +89,7 @@ wss.on('connection', ws => {
   });
 });
 
+// ** 중요: API 라우트를 정적 파일 서빙보다 먼저 정의합니다. **
 // 초기 데이터 로드 API
 app.get('/api/robots', async (req, res) => {
   if (!publisherClient.isReady) {
@@ -99,7 +99,7 @@ app.get('/api/robots', async (req, res) => {
     const keys = await publisherClient.keys('robot:aw-robot-*');
     const robots = [];
     for (const key of keys) {
-      const robotData = await publisherClient.hgetall(key);
+      const robotData = await publisherClient.hGetAll(key); // hGetAll로 수정됨
       if (robotData) {
         const [latitude, longitude] = robotData.location.split(',').map(Number);
         robots.push({
@@ -116,11 +116,11 @@ app.get('/api/robots', async (req, res) => {
 });
 
 // Vue.js 프론트엔드 정적 파일 서빙
-// 'dist' 폴더는 Vue.js 빌드 시 생성되는 결과물이 저장되는 곳입니다.
-// GitHub Actions에서 'dist' 폴더의 내용을 이 경로로 복사할 것입니다.
+// 이 미들웨어는 '/api'로 시작하지 않는 모든 요청에 대해 'dist' 폴더에서 파일을 찾습니다.
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Vue Router history 모드를 위한 모든 요청에 index.html 서빙
+// 이 라우트는 위의 static 미들웨어와 API 라우트가 처리하지 못한 모든 요청을 처리합니다.
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });

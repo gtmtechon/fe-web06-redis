@@ -1,18 +1,17 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  // devServer.proxy 설정은 통합 배포 시 필요 없으므로 제거합니다.
-  // devServer: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'http://localhost:3000',
-  //       changeOrigin: true
-  //     },
-  //     '/websocket': {
-  //       target: 'ws://localhost:3000',
-  //       ws: true,
-  //       changeOrigin: true
-  //     }
-  //   }
-  // }
+  devServer: { // 이 부분이 중요합니다.
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000', // Node.js 백엔드 주소
+        changeOrigin: true
+      },
+      '/websocket': { // WebSocket 프록시
+        target: 'ws://localhost:3000', // Node.js 백엔드 WebSocket 주소
+        ws: true, // WebSocket 프록시 활성화
+        changeOrigin: true
+      }
+    }
+  }
 })

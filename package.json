@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+     "serve": "vue-cli-service serve",
     "dev": "nodemon app.js",
     "build-client": "vue-cli-service build",
     "lint": "eslint --ext .js,.vue src"
