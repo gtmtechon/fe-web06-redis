@@ -1,0 +1,22 @@
+{
+  "name": "robot-monitoring-app",
+  "version": "1.0.0",
+  "description": "Integrated Node.js backend and Vue.js frontend for robot monitoring.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "npm install --prefix client && npm run build --prefix client",
+    "dev": "node server.js",
+    "build-client": "npm run build --prefix client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5",
+    "ioredis": "^5.4.1",
+    "dotenv": "^16.4.5",
+    "cors": "^2.8.5"
+  }
+}
